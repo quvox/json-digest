@@ -76,14 +76,14 @@ def digest_tree(jsonstr):
     Args:
         jsonstr (string): input json string (must be UTF-8 with no BOM)
     Returns:
-        dict: Digest tree structure (the values are the digests of the correspoinding values)
-        string: HEX string of the SHA256 digest of the tree
+        dict|None: result of digest {digest: SHA256-based digest, digest_tree: tree-structured digests}
     """
     jsondat = json.loads(jsonstr)
 
     if 'digest_version' not in jsondat:
-        return None, None
+        return None
     if jsondat['digest_version'] == 1:
-        return _make_digest_tree_v1(jsondat)
+        dt, d = _make_digest_tree_v1(jsondat)
+        return {"digest": d, "digest_tree": dt}
     else:
-        return None, None
+        return None

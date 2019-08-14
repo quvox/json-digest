@@ -15,8 +15,8 @@ class TestJsonDigest(object):
             "cccc": "xxxxxx",
             "ddd": True
         }
-        digest_tree, d = digest.digest_tree(json.dumps(dat))
-        assert digest_tree is None
+        res = digest.digest_tree(json.dumps(dat))
+        assert res is None
 
     def test_02_simple_json(self):
         print("\n-----", sys._getframe().f_code.co_name, "-----")
@@ -29,10 +29,10 @@ class TestJsonDigest(object):
             "fff": None,
             "ggg": "う"
         }
-        digest_tree, d = digest.digest_tree(json.dumps(dat))
-        assert len(d) == 64
-        print(d)
-        pprint.pprint(digest_tree)
+        res = digest.digest_tree(json.dumps(dat))
+        assert len(res['digest']) == 64
+        print(res['digest'])
+        pprint.pprint(res['digest_tree'])
 
     def test_03_2lv_nested_json(self):
         print("\n-----", sys._getframe().f_code.co_name, "-----")
@@ -48,10 +48,10 @@ class TestJsonDigest(object):
             },
             "eeee": "yyyyyy"
         }
-        digest_tree, d = digest.digest_tree(json.dumps(dat))
-        assert len(d) == 64
-        print(d)
-        pprint.pprint(digest_tree)
+        res = digest.digest_tree(json.dumps(dat))
+        assert len(res['digest']) == 64
+        print(res['digest'])
+        pprint.pprint(res['digest_tree'])
 
     def test_04_2lv_nested_json_with_array(self):
         print("\n-----", sys._getframe().f_code.co_name, "-----")
@@ -69,10 +69,10 @@ class TestJsonDigest(object):
             "お1A": "yyyyyy",
             "ffff": ["1", 2, 3.3, True, False, ["aaa", "bbb", 3], {"a3": 123, "b3": "YYYY"}]
         }
-        digest_tree, d = digest.digest_tree(json.dumps(dat))
-        assert len(d) == 64
-        print(d)
-        pprint.pprint(digest_tree)
+        res = digest.digest_tree(json.dumps(dat))
+        assert len(res['digest']) == 64
+        print(res['digest'])
+        pprint.pprint(res['digest_tree'])
 
 
 if __name__ == '__main__':
