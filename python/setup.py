@@ -22,12 +22,11 @@ class MyInstall(install):
             install.run(self)
 
 
-jsondigest_requires = [
-]
+jsondigest_requires = []
 
 jsondigest_packages = ['jsondigest']
 
-jsondigest_commands = []
+jsondigest_commands = ['jsondigest/json_digest.py']
 
 jsondigest_classifiers = [
                     'Development Status :: 4 - Beta',
@@ -37,13 +36,13 @@ jsondigest_classifiers = [
                     'Topic :: Software Development']
 
 setup(
-    name='json-digest',
-    version='0.0.1',
+    name='json-structure-digest',
+    version='0.9.0',
     description='A library and tool for calculating consistent digest of a json data string',
     long_description=readme,
     long_description_content_type='text/markdown',
     url='',
-    author='quvox.net',
+    author='Takeshi Kubo',
     author_email='',
     license='Apache License 2.0',
     classifiers=jsondigest_classifiers,
