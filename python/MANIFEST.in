@@ -1,6 +1,5 @@
 include INSTALL
-include LICENSE
-include LICENSE.python
+include LICENSE.txt
 include MANIFEST.in
 include *.rst
 include prepare.py

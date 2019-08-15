@@ -1,14 +1,14 @@
 Consistent message digest for JSON object
 =====
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module is a python module that creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
 This repository also includes [Javascript version](../javascript/README.md).
 
 
-# Environment and install
+## Environment and install
 * version
   - 3.5 or later
 * install the module
@@ -18,7 +18,7 @@ pip install json-structure-digest
 * command line tool
   - json_digest.py
 
-# Usage
+## Usage
 
 A basic usage is like as follows:
 ```python
@@ -62,7 +62,7 @@ digest_structure2 = result2["digest_structure"]
 sha256_hex and sha256_hex2, digest_structure and digest_structure2  are identical, respectively. Note that the digest method accepts string params only. 
 
 
-# Command line tool
+## Command line tool
 
 ```json_digest.py``` is available after pip install. The usage is very simple.
 ```bash
@@ -76,7 +76,7 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 
-# Requirements
+## Requirements
 * JSON string must comply with [RFC8259](https://tools.ietf.org/html/rfc8259).
   - The JSON string must be encoded with UTF-8 and no BOM.
   - Supported types of value are string, number (integer, float), object, array, boolean and null. 
@@ -84,8 +84,8 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 
-# Spec of version 1
-## Summary
+## Spec of version 1
+### Summary
 * ```digest_version: 1```
 * A digest is calculated for each value in a JSON object.
 * The digest function in this version is SHA256.
@@ -100,3 +100,7 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 See [here](../README.md) in detail.
+
+
+## License
+MIT

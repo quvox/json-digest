@@ -1,14 +1,14 @@
 Consistent message digest for JSON object
 =====
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module is a python module that creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
 This repository also includes [Javascript version](../javascript/README.md).
 
 
-# Environment and install
+## Environment and install
 * version
   - 3.5 or later
 * install the module
@@ -18,7 +18,7 @@ pip install json-structure-digest
 * command line tool
   - json_digest.py
 
-# Usage
+## Usage
 
 A basic usage is like as follows:
 ```python
@@ -59,10 +59,10 @@ sha256_hex2 = result2["digest"]
 digest_structure2 = result2["digest_structure"]
 ```
 
-sha256_hex and sha256_hex2, digest_structure and digest_structure2  are identical, respectively. Note that the digest method accepts string params only. 
+sha256_hex and sha256_hex2, digest_structure and digest_structure2  are identical, respectively. Note that the digest method accepts string params only.
 
 
-# Command line tool
+## Command line tool
 
 ```json_digest.py``` is available after pip install. The usage is very simple.
 ```bash
@@ -72,26 +72,26 @@ or
 ```bash
 $ cat path_to_jsonfile | json_digest.py
 ```
-You will get a json string of the digest and the digest structure of the given json file. 
+You will get a json string of the digest and the digest structure of the given json file.
 
 
 
-# Requirements
+## Requirements
 * JSON string must comply with [RFC8259](https://tools.ietf.org/html/rfc8259).
   - The JSON string must be encoded with UTF-8 and no BOM.
-  - Supported types of value are string, number (integer, float), object, array, boolean and null. 
+  - Supported types of value are string, number (integer, float), object, array, boolean and null.
 * "digest_version" must be included in the JSON.
 
 
 
-# Spec of version 1
-## Summary
+## Spec of version 1
+### Summary
 * ```digest_version: 1```
 * A digest is calculated for each value in a JSON object.
 * The digest function in this version is SHA256.
 * To achieve consistency, the keys at each level in the JSON object are sorted in increasing order of the ASCII value in the digest calculation procedure.
 * The following conversions before digest calculation are performed:
-  - An integer value is converted in 8-byte array in little-endian. 
+  - An integer value is converted in 8-byte array in little-endian.
   - A float value is converted in 8-byte array in little-endian.
   - A boolean value is converted to either "true" or "false".
   - A null value is converted to "null".
@@ -100,3 +100,7 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 See [here](../README.md) in detail.
+
+
+## License
+MIT

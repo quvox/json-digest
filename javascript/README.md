@@ -1,7 +1,7 @@
 Consistent message digest for JSON object
 =====
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
@@ -9,7 +9,7 @@ This repository also includes [Python version](../python/README.md).
 
 
 
-# Environment and install
+## Environment and install
 * Support
   - Nodejs 0.10 or later
   - Browsers (chrome, firefox, safari, edge)
@@ -23,7 +23,7 @@ npm install json-structure-digest
 ```
 
 
-# Usage
+## Usage
 
 A basic usage is like as follows:
 ```javascript
@@ -67,7 +67,7 @@ sha256Hex and sha256Hex2, digestStructure and digestStructure2  are identical, r
 
 
 
-# Requirements
+## Requirements
 * JSON string must comply with [RFC8259](https://tools.ietf.org/html/rfc8259).
   - The JSON string must be encoded with UTF-8 and no BOM.
   - Supported types of value are string, number (integer, float), object, array, boolean and null. 
@@ -75,8 +75,8 @@ sha256Hex and sha256Hex2, digestStructure and digestStructure2  are identical, r
 
 
 
-# Spec of version 1
-## Summary
+## Spec of version 1
+### Summary
 * ```digest_version: 1```
 * A digest is calculated for each value in a JSON object.
 * The digest function in this version is SHA256.
@@ -90,3 +90,7 @@ sha256Hex and sha256Hex2, digestStructure and digestStructure2  are identical, r
 
 
 See [here](../README.md) in detail.
+
+
+## License
+MIT

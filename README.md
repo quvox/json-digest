@@ -1,14 +1,14 @@
 Consistent message digest for JSON object
 =====
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
 
 
-# Supported Programming languages
-## Python
+## Supported Programming languages
+### Python
 * version
   - 3.5 or later
 * install the module
@@ -22,7 +22,7 @@ from jsondigest import digest
 * command line tool
   - json_digest.py
 
-## Javascript
+### Javascript
 * environment
   - Nodejs 0.10 or later
   - Browsers (chrome, firefox, safari, edge)
@@ -41,7 +41,7 @@ import { digest } from json-structure-digest
 
 
 
-# Requirements
+## Requirements
 * JSON string must comply with [RFC8259](https://tools.ietf.org/html/rfc8259).
   - The JSON string must be encoded with UTF-8 and no BOM.
   - Supported types of value are string, number (integer, float), object, array, boolean and null. 
@@ -49,8 +49,8 @@ import { digest } from json-structure-digest
 
 
 
-# Spec of version 1
-## Summary
+## Spec of version 1
+### Summary
 * ```digest_version: 1```
 * A digest is calculated for each value in a JSON object.
 * The digest function in this version is SHA256.
@@ -62,9 +62,9 @@ import { digest } from json-structure-digest
   - A null value is converted to "null".
 * All digests are expressed in HEX string in little endian.
 
-## Details
+### Details
 
-### Digest calculation
+#### Digest calculation
 
 Consider the following JSON object for example:
 
@@ -156,7 +156,7 @@ The parameter "digest_structure" is the object with keys and the digests of the 
 In this way, the digest ```result = {
     'digest': 'ff2fcda59bf567c4a735600593df9102d9c19f151b645f95af6cc2adc6d2d592',...}``` is obtained finally, which is the digest of the JSON object.
 
-### Digest calculation with merging digest_structure
+#### Digest calculation with merging digest_structure
 
 If an partial JSON object and the whole digest structure are given, the digest function of this module can merge them and calculate the digest for the merged one.
 
@@ -210,9 +210,11 @@ You will get the same result by ```digest(json.dumps(partial_jsonobj), json.dump
 
 
 
-# Usage
+## Usage
 
 For Python module, see [here](./python/README.md).
 
 For Javascript, see [here](./javascript/README.md).
 
+## License
+MIT
