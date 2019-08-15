@@ -1,6 +1,8 @@
 Consistent message digest for JSON object
 =====
 
+[![npm version](https://badge.fury.io/js/json-structure-digest.svg)](https://badge.fury.io/js/json-structure-digest)
+[![Dependency Status](https://david-dm.org/quvox/json-digest.svg)](https://david-dm.org/quvox/json-digest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
