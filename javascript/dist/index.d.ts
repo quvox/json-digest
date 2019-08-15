@@ -3,9 +3,9 @@
  */
 import { digest } from './digest';
 declare const _default: {
-    digest: (jsonString: string) => Promise<{
+    digest: (jsonString: string, digestStructure?: string) => Promise<{
         digest: string;
-        digestTree: object;
+        digestStructure: object;
     }>;
 };
 export default _default;

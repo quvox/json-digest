@@ -54,10 +54,11 @@ var i64 = __importStar(require("int64-buffer"));
 /**
  * Calculate tree structure-based digest
  * @param jsonString
- * @returns Promise<{digest: string, digestTree: object}|null>
+ * @param digestStructure
+ * @returns Promise<{digest: string, digestStructure: object}|null>
  */
-exports.digest = function (jsonString) { return __awaiter(_this, void 0, void 0, function () {
-    var jsonDat;
+exports.digest = function (jsonString, digestStructure) { return __awaiter(_this, void 0, void 0, function () {
+    var jsonDat, ds, tmp, d;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -65,10 +66,19 @@ exports.digest = function (jsonString) { return __awaiter(_this, void 0, void 0,
                 if (!jsonDat.hasOwnProperty('digest_version')) {
                     return [2 /*return*/, null];
                 }
-                if (!(jsonDat['digest_version'] === 1)) return [3 /*break*/, 2];
+                if (!(jsonDat['digest_version'] === 1)) return [3 /*break*/, 3];
                 return [4 /*yield*/, _make_structure_digest_v1(jsonDat)];
-            case 1: return [2 /*return*/, _a.sent()];
-            case 2: return [2 /*return*/, null];
+            case 1:
+                ds = _a.sent();
+                if (digestStructure !== undefined) {
+                    tmp = JSON.parse(digestStructure);
+                    ds = _mergeDeep(tmp, ds);
+                }
+                return [4 /*yield*/, _calc_structure_digest(ds)];
+            case 2:
+                d = _a.sent();
+                return [2 /*return*/, { digest: d, digestStructure: ds }];
+            case 3: return [2 /*return*/, null];
         }
     });
 }); };
@@ -77,9 +87,9 @@ exports.digest = function (jsonString) { return __awaiter(_this, void 0, void 0,
  * @param jsonDat
  */
 var _make_structure_digest_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
-    var keys, k, stringToHash, digestTree, _a, _b, _i, k, res, d, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var keys, k, digestTree, _a, _b, _i, k, res;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 keys = [];
                 for (k in jsonDat) {
@@ -88,36 +98,29 @@ var _make_structure_digest_v1 = function (jsonDat) { return __awaiter(_this, voi
                     }
                 }
                 keys.sort();
-                stringToHash = '';
                 digestTree = {};
                 _a = [];
                 for (_b in keys)
                     _a.push(_b);
                 _i = 0;
-                _d.label = 1;
+                _c.label = 1;
             case 1:
                 if (!(_i < _a.length)) return [3 /*break*/, 4];
                 k = _a[_i];
                 return [4 /*yield*/, _serialize(jsonDat[keys[k]])];
             case 2:
-                res = _d.sent();
-                if (!res.digestTree) {
+                res = _c.sent();
+                if (!res.digestStructure) {
                     digestTree[keys[k]] = res.digest;
                 }
                 else {
-                    digestTree[keys[k]] = res.digestTree;
+                    digestTree[keys[k]] = res.digestStructure;
                 }
-                stringToHash = "" + stringToHash + keys[k] + res.digest;
-                _d.label = 3;
+                _c.label = 3;
             case 3:
                 _i++;
                 return [3 /*break*/, 1];
-            case 4:
-                _c = _toHex;
-                return [4 /*yield*/, js_crypto_hash_1.default.compute(_toUTF8Array(stringToHash))];
-            case 5:
-                d = _c.apply(void 0, [_d.sent()]);
-                return [2 /*return*/, { digest: d, digestTree: digestTree }];
+            case 4: return [2 /*return*/, digestTree];
         }
     });
 }); };
@@ -126,40 +129,33 @@ var _make_structure_digest_v1 = function (jsonDat) { return __awaiter(_this, voi
  * @param jsonDat
  */
 var _make_array_digest_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
-    var stringToHash, digestArray, _a, _b, _i, i, res, d, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var digestArray, _a, _b, _i, i, res;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                stringToHash = '';
                 digestArray = [];
                 _a = [];
                 for (_b in jsonDat)
                     _a.push(_b);
                 _i = 0;
-                _d.label = 1;
+                _c.label = 1;
             case 1:
                 if (!(_i < _a.length)) return [3 /*break*/, 4];
                 i = _a[_i];
                 return [4 /*yield*/, _serialize(jsonDat[i])];
             case 2:
-                res = _d.sent();
-                if (!res.digestTree) {
+                res = _c.sent();
+                if (!res.digestStructure) {
                     digestArray.push(res.digest);
                 }
                 else {
-                    digestArray.push(res.digestTree);
+                    digestArray.push(res.digestStructure);
                 }
-                stringToHash = "" + stringToHash + res.digest;
-                _d.label = 3;
+                _c.label = 3;
             case 3:
                 _i++;
                 return [3 /*break*/, 1];
-            case 4:
-                _c = _toHex;
-                return [4 /*yield*/, js_crypto_hash_1.default.compute(_toUTF8Array(stringToHash))];
-            case 5:
-                d = _c.apply(void 0, [_d.sent()]);
-                return [2 /*return*/, { digest: d, digestTree: digestArray }];
+            case 4: return [2 /*return*/, digestArray];
         }
     });
 }); };
@@ -181,9 +177,7 @@ var _serialize = function (value) { return __awaiter(_this, void 0, void 0, func
                 if (!_isArray(value)) return [3 /*break*/, 3];
                 return [4 /*yield*/, _make_array_digest_v1(value)];
             case 2:
-                r = _b.sent();
-                d = r.digest;
-                dt = r.digestTree;
+                dt = _b.sent();
                 return [3 /*break*/, 7];
             case 3:
                 if (!(value == null)) return [3 /*break*/, 5];
@@ -193,9 +187,7 @@ var _serialize = function (value) { return __awaiter(_this, void 0, void 0, func
                 return [3 /*break*/, 7];
             case 5: return [4 /*yield*/, _make_structure_digest_v1(value)];
             case 6:
-                r = _b.sent();
-                d = r.digest;
-                dt = r.digestTree;
+                dt = _b.sent();
                 _b.label = 7;
             case 7: return [3 /*break*/, 18];
             case 8: return [4 /*yield*/, js_crypto_hash_1.default.compute(_toUTF8Array(value), 'SHA-256')];
@@ -224,10 +216,109 @@ var _serialize = function (value) { return __awaiter(_this, void 0, void 0, func
                 return [3 /*break*/, 18];
             case 17: return [2 /*return*/, null];
             case 18:
-                if (typeof dt === 'undefined') {
+                if (dt === undefined) {
                     d = _toHex(d);
                 }
-                return [2 /*return*/, { digest: d, digestTree: dt }];
+                return [2 /*return*/, { digest: d, digestStructure: dt }];
+        }
+    });
+}); };
+var _calc_structure_digest = function (digestStructure) { return __awaiter(_this, void 0, void 0, function () {
+    var keys, k, stringToHash, d, _a, _b, _i, k, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                keys = [];
+                for (k in digestStructure) {
+                    if (digestStructure.hasOwnProperty(k)) {
+                        keys.push(k);
+                    }
+                }
+                keys.sort();
+                stringToHash = '';
+                _a = [];
+                for (_b in keys)
+                    _a.push(_b);
+                _i = 0;
+                _e.label = 1;
+            case 1:
+                if (!(_i < _a.length)) return [3 /*break*/, 10];
+                k = _a[_i];
+                _c = typeof digestStructure[keys[k]];
+                switch (_c) {
+                    case "object": return [3 /*break*/, 2];
+                }
+                return [3 /*break*/, 7];
+            case 2:
+                if (!_isArray(digestStructure[keys[k]])) return [3 /*break*/, 4];
+                return [4 /*yield*/, _calc_array_digest(digestStructure[keys[k]])];
+            case 3:
+                d = _e.sent();
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, _calc_structure_digest(digestStructure[keys[k]])];
+            case 5:
+                d = _e.sent();
+                _e.label = 6;
+            case 6: return [3 /*break*/, 8];
+            case 7:
+                d = digestStructure[keys[k]];
+                return [3 /*break*/, 8];
+            case 8:
+                stringToHash = "" + stringToHash + keys[k] + d;
+                _e.label = 9;
+            case 9:
+                _i++;
+                return [3 /*break*/, 1];
+            case 10:
+                _d = _toHex;
+                return [4 /*yield*/, js_crypto_hash_1.default.compute(_toUTF8Array(stringToHash))];
+            case 11: return [2 /*return*/, _d.apply(void 0, [_e.sent()])];
+        }
+    });
+}); };
+var _calc_array_digest = function (digestStructure) { return __awaiter(_this, void 0, void 0, function () {
+    var d, stringToHash, _a, _b, _i, k, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                stringToHash = '';
+                _a = [];
+                for (_b in digestStructure)
+                    _a.push(_b);
+                _i = 0;
+                _e.label = 1;
+            case 1:
+                if (!(_i < _a.length)) return [3 /*break*/, 10];
+                k = _a[_i];
+                _c = typeof digestStructure[k];
+                switch (_c) {
+                    case "object": return [3 /*break*/, 2];
+                }
+                return [3 /*break*/, 7];
+            case 2:
+                if (!_isArray(digestStructure[k])) return [3 /*break*/, 4];
+                return [4 /*yield*/, _calc_array_digest(digestStructure[k])];
+            case 3:
+                d = _e.sent();
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, _calc_structure_digest(digestStructure[k])];
+            case 5:
+                d = _e.sent();
+                _e.label = 6;
+            case 6: return [3 /*break*/, 8];
+            case 7:
+                d = digestStructure[k];
+                return [3 /*break*/, 8];
+            case 8:
+                stringToHash = "" + stringToHash + d;
+                _e.label = 9;
+            case 9:
+                _i++;
+                return [3 /*break*/, 1];
+            case 10:
+                _d = _toHex;
+                return [4 /*yield*/, js_crypto_hash_1.default.compute(_toUTF8Array(stringToHash))];
+            case 11: return [2 /*return*/, _d.apply(void 0, [_e.sent()])];
         }
     });
 }); };
@@ -266,5 +357,41 @@ var _toHex = function (buf) {
         result.push(val.substr(val.length - 2));
     }
     return result.join('');
+};
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+var _isObject = function (item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+};
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+var _mergeDeep = function (target) {
+    var _a, _b;
+    var sources = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        sources[_i - 1] = arguments[_i];
+    }
+    if (!sources.length)
+        return target;
+    var source = sources.shift();
+    if (_isObject(target) && _isObject(source)) {
+        for (var key in source) {
+            if (_isObject(source[key])) {
+                if (!target[key])
+                    Object.assign(target, (_a = {}, _a[key] = {}, _a));
+                _mergeDeep(target[key], source[key]);
+            }
+            else {
+                Object.assign(target, (_b = {}, _b[key] = source[key], _b));
+            }
+        }
+    }
+    return _mergeDeep.apply(void 0, [target].concat(sources));
 };
 //# sourceMappingURL=digest.js.map

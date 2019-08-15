@@ -8,15 +8,22 @@ import * as i64 from 'int64-buffer';
 /**
  * Calculate tree structure-based digest
  * @param jsonString
- * @returns Promise<{digest: string, digestTree: object}|null>
+ * @param digestStructure
+ * @returns Promise<{digest: string, digestStructure: object}|null>
  */
-export const digest = async (jsonString: string): Promise<{digest: string, digestTree: object}|null> => {
+export const digest = async (jsonString: string, digestStructure?: string): Promise<{digest: string, digestStructure: object}|null> => {
   const jsonDat = JSON.parse(jsonString);
   if (!jsonDat.hasOwnProperty('digest_version')) {
     return null;
   }
   if (jsonDat['digest_version'] === 1) {
-    return await _make_structure_digest_v1(jsonDat);
+    let ds = await _make_structure_digest_v1(jsonDat);
+    if (digestStructure !== undefined) {
+      const tmp = JSON.parse(digestStructure);
+      ds = _mergeDeep(tmp, ds);
+    }
+    const d = await _calc_structure_digest(ds)
+    return {digest: d, digestStructure: ds};
   } else {
     return null;
   }
@@ -27,7 +34,7 @@ export const digest = async (jsonString: string): Promise<{digest: string, diges
  * Calculate tree structure-based digest
  * @param jsonDat
  */
-const _make_structure_digest_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
+const _make_structure_digest_v1 = async (jsonDat: object): Promise<object> => {
   const keys = [];
   for (const k in jsonDat) {
     if (jsonDat.hasOwnProperty(k)) {
@@ -36,20 +43,16 @@ const _make_structure_digest_v1 = async (jsonDat: object): Promise<{digest: stri
   }
   keys.sort();
 
-  let stringToHash = '';
   const digestTree = {};
   for (const k in keys) {
     const res = await _serialize(jsonDat[keys[k]]);
-    if (! res.digestTree) {
+    if (! res.digestStructure) {
       digestTree[keys[k]] = res.digest;
     } else {
-      digestTree[keys[k]] = res.digestTree;
+      digestTree[keys[k]] = res.digestStructure;
     }
-    stringToHash = `${stringToHash}${keys[k]}${res.digest}`;
   }
-
-  const d = _toHex(await hash.compute(_toUTF8Array(stringToHash)));
-  return { digest: d, digestTree: digestTree };
+  return digestTree;
 };
 
 
@@ -57,40 +60,32 @@ const _make_structure_digest_v1 = async (jsonDat: object): Promise<{digest: stri
  * Calculate array structure-based digest
  * @param jsonDat
  */
-const _make_array_digest_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
-  let stringToHash = '';
+const _make_array_digest_v1 = async (jsonDat: object): Promise<object> => {
   const digestArray = [];
   for (const i in jsonDat) {
     const res = await _serialize(jsonDat[i]);
-    if (! res.digestTree) {
+    if (! res.digestStructure) {
       digestArray.push(res.digest);
     } else {
-      digestArray.push(res.digestTree);
+      digestArray.push(res.digestStructure);
     }
-    stringToHash = `${stringToHash}${res.digest}`;
   }
-
-  const d = _toHex(await hash.compute(_toUTF8Array(stringToHash)));
-  return { digest: d, digestTree: digestArray };
+  return digestArray;
 };
 
 
-const _serialize = async (value: any): Promise<{digest: string, digestTree: object}|null> => {
+const _serialize = async (value: any): Promise<{digest: string, digestStructure: object}|null> => {
   let d;
   let dt;
   switch (typeof value) {
     case "object":
       let r;
       if (_isArray(value)) {
-        r = await _make_array_digest_v1(value);
-        d = r.digest;
-        dt = r.digestTree;
+        dt = await _make_array_digest_v1(value);
       } else if (value == null) {
         d = await hash.compute(_toUTF8Array('null'), 'SHA-256');
       } else {
-        r = await _make_structure_digest_v1(value);
-        d = r.digest;
-        dt = r.digestTree;
+        dt = await _make_structure_digest_v1(value);
       }
       break;
 
@@ -118,10 +113,64 @@ const _serialize = async (value: any): Promise<{digest: string, digestTree: obje
       return null;
   }
 
-  if (typeof dt === 'undefined') {
+  if (dt === undefined) {
     d = _toHex(d);
   }
-  return { digest: d, digestTree: dt };
+  return { digest: d, digestStructure: dt };
+};
+
+
+const _calc_structure_digest = async(digestStructure: any): Promise<string> => {
+  const keys = [];
+  for (const k in digestStructure) {
+    if (digestStructure.hasOwnProperty(k)) {
+      keys.push(k);
+    }
+  }
+  keys.sort();
+
+  let stringToHash = '';
+  let d;
+  for (const k in keys) {
+    switch (typeof digestStructure[keys[k]]) {
+      case "object":
+        if (_isArray(digestStructure[keys[k]])) {
+          d = await _calc_array_digest(digestStructure[keys[k]]);
+        } else {
+          d = await _calc_structure_digest(digestStructure[keys[k]]);
+        }
+        break;
+
+      default:
+        d = digestStructure[keys[k]];
+        break;
+    }
+    stringToHash = `${stringToHash}${keys[k]}${d}`;
+  }
+  return _toHex(await hash.compute(_toUTF8Array(stringToHash)));
+};
+
+
+const _calc_array_digest = async(digestStructure: any): Promise<string> => {
+  let d;
+  let stringToHash = '';
+  for (const k in digestStructure) {
+    switch (typeof digestStructure[k]) {
+      case "object":
+        if (_isArray(digestStructure[k])) {
+          d = await _calc_array_digest(digestStructure[k]);
+        } else {
+          d = await _calc_structure_digest(digestStructure[k]);
+        }
+        break;
+
+      default:
+        d = digestStructure[k];
+        break;
+    }
+    stringToHash = `${stringToHash}${d}`;
+  }
+  return _toHex(await hash.compute(_toUTF8Array(stringToHash)));
 };
 
 
@@ -168,4 +217,36 @@ const _toHex = (buf: Uint8Array[]): string => {
     result.push(val.substr(val.length-2))
   }
   return result.join('');
+};
+
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+const _isObject = (item: any): boolean => {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+};
+
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+const _mergeDeep = (target, ...sources): any => {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (_isObject(target) && _isObject(source)) {
+    for (const key in source) {
+      if (_isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        _mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return _mergeDeep(target, ...sources);
 };

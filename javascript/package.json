@@ -1,7 +1,7 @@
 {
-  "name": "json-digest-tree",
+  "name": "json-structure-digest",
   "version": "0.1.0",
-  "description": "Consistent digest calculation for JSON",
+  "description": "Structure-based consistent digest calculation for JSON",
   "author": "Takeshi Kubo",
   "private": true,
   "main": "./dist/index.js",

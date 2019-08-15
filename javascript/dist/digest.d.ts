@@ -4,10 +4,11 @@
 /**
  * Calculate tree structure-based digest
  * @param jsonString
- * @returns Promise<{digest: string, digestTree: object}|null>
+ * @param digestStructure
+ * @returns Promise<{digest: string, digestStructure: object}|null>
  */
-export declare const digest: (jsonString: string) => Promise<{
+export declare const digest: (jsonString: string, digestStructure?: string) => Promise<{
     digest: string;
-    digestTree: object;
+    digestStructure: object;
 }>;
 //# sourceMappingURL=digest.d.ts.map
