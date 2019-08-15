@@ -2,6 +2,8 @@ Consistent message digest for JSON object
 =====
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c89648224f4636fa8529/maintainability)](https://codeclimate.com/github/quvox/json-digest/maintainability)
+[![CircleCI](https://circleci.com/gh/quvox/json-digest/tree/develop.svg?style=svg)](https://circleci.com/gh/quvox/json-digest/tree/develop)
 
 This module is a python module that creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
