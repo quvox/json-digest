@@ -1,0 +1,14 @@
+{
+    "digest_version": 1,
+    "aaaa": 1,
+    "bbbb": 2.34,
+    "cccc": "xxxxxx",
+    "いいいいいい": {
+        "a2": 2,
+        "b2": 4.55324121,
+        "c2": "あああああああああ",
+        "d2": [1, 2, 3, false, "xxyyzz"]
+    },
+    "お1A": "yyyyyy",
+    "ffff": ["1", 2, 3.3, true, null, ["aaa", "bbb", 3], {"a3": 123, "b3": "YYYY"}]
+}

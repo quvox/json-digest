@@ -1,0 +1,85 @@
+version: 2.1
+workflows:
+  build_and_deploy:
+    jobs:
+      - build-python:
+          filters:
+            tags:
+              only: /^py-.*/
+            branches:
+              ignore: /.*/
+      - test-python:
+          requires:
+            - build-python
+          filters:
+            tags:
+              only: /^py-.*/
+            branches:
+              ignore: /.*/
+      - deploy-python:
+          requires:
+            - test-python
+          filters:
+            tags:
+              only: /^py-.*/
+            branches:
+              ignore: /.*/
+jobs:
+  build-python:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+      - run:
+          name: install python dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install pytest
+            pip install -r python/scripts/requirements-pypi.txt
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+          paths:
+            - "venv"
+  test-python:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+      - run:
+          name: Perform test
+          command: |
+            . venv/bin/activate
+            cd python/tests
+            pytest test_jsondigest.py
+      - run:
+          name: Test command line tool
+          command: |
+            . venv/bin/activate
+            cd python/tests
+            bash test_cmd.sh
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+          paths:
+            - "venv"
+  deploy-python:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+      - run:
+          name: verify version
+          command: |
+            . venv/bin/activate
+            cd python/
+            python setup.py verify
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
+          paths:
+            - "venv"
