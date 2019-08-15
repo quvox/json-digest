@@ -8,6 +8,7 @@ fi
 python3 -mvenv venv
 . venv/bin/activate
 pip install -r requirements-pypi.txt
+pip install wheel
 
 cd ..
 rm -rf dist/ json_structure_digest.egg-info/
