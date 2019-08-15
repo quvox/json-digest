@@ -30,6 +30,7 @@ THE SOFTWARE.
 import sys
 import os
 from argparse import ArgumentParser
+sys.path.append("../")
 from jsondigest import digest
 
 
