@@ -16,7 +16,7 @@ export const digest = async (jsonString: string): Promise<{digest: string, diges
     return null;
   }
   if (jsonDat['digest_version'] === 1) {
-    return await _make_digest_tree_v1(jsonDat);
+    return await _make_structure_digest_v1(jsonDat);
   } else {
     return null;
   }
@@ -27,7 +27,7 @@ export const digest = async (jsonString: string): Promise<{digest: string, diges
  * Calculate tree structure-based digest
  * @param jsonDat
  */
-const _make_digest_tree_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
+const _make_structure_digest_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
   const keys = [];
   for (const k in jsonDat) {
     if (jsonDat.hasOwnProperty(k)) {
@@ -57,7 +57,7 @@ const _make_digest_tree_v1 = async (jsonDat: object): Promise<{digest: string, d
  * Calculate array structure-based digest
  * @param jsonDat
  */
-const _make_digest_array_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
+const _make_array_digest_v1 = async (jsonDat: object): Promise<{digest: string, digestTree: object}> => {
   let stringToHash = '';
   const digestArray = [];
   for (const i in jsonDat) {
@@ -82,13 +82,13 @@ const _serialize = async (value: any): Promise<{digest: string, digestTree: obje
     case "object":
       let r;
       if (_isArray(value)) {
-        r = await _make_digest_array_v1(value);
+        r = await _make_array_digest_v1(value);
         d = r.digest;
         dt = r.digestTree;
       } else if (value == null) {
         d = await hash.compute(_toUTF8Array('null'), 'SHA-256');
       } else {
-        r = await _make_digest_tree_v1(value);
+        r = await _make_structure_digest_v1(value);
         d = r.digest;
         dt = r.digestTree;
       }

@@ -66,7 +66,7 @@ exports.digest = function (jsonString) { return __awaiter(_this, void 0, void 0,
                     return [2 /*return*/, null];
                 }
                 if (!(jsonDat['digest_version'] === 1)) return [3 /*break*/, 2];
-                return [4 /*yield*/, _make_digest_tree_v1(jsonDat)];
+                return [4 /*yield*/, _make_structure_digest_v1(jsonDat)];
             case 1: return [2 /*return*/, _a.sent()];
             case 2: return [2 /*return*/, null];
         }
@@ -76,7 +76,7 @@ exports.digest = function (jsonString) { return __awaiter(_this, void 0, void 0,
  * Calculate tree structure-based digest
  * @param jsonDat
  */
-var _make_digest_tree_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
+var _make_structure_digest_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
     var keys, k, stringToHash, digestTree, _a, _b, _i, k, res, d, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -125,7 +125,7 @@ var _make_digest_tree_v1 = function (jsonDat) { return __awaiter(_this, void 0, 
  * Calculate array structure-based digest
  * @param jsonDat
  */
-var _make_digest_array_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
+var _make_array_digest_v1 = function (jsonDat) { return __awaiter(_this, void 0, void 0, function () {
     var stringToHash, digestArray, _a, _b, _i, i, res, d, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -179,7 +179,7 @@ var _serialize = function (value) { return __awaiter(_this, void 0, void 0, func
             case 1:
                 r = void 0;
                 if (!_isArray(value)) return [3 /*break*/, 3];
-                return [4 /*yield*/, _make_digest_array_v1(value)];
+                return [4 /*yield*/, _make_array_digest_v1(value)];
             case 2:
                 r = _b.sent();
                 d = r.digest;
@@ -191,7 +191,7 @@ var _serialize = function (value) { return __awaiter(_this, void 0, void 0, func
             case 4:
                 d = _b.sent();
                 return [3 /*break*/, 7];
-            case 5: return [4 /*yield*/, _make_digest_tree_v1(value)];
+            case 5: return [4 /*yield*/, _make_structure_digest_v1(value)];
             case 6:
                 r = _b.sent();
                 d = r.digest;

@@ -39,7 +39,7 @@ jsondigest_classifiers = [
 setup(
     name='json-digest',
     version='0.0.1',
-    description='A library and tool for calculating digest of a json data string',
+    description='A library and tool for calculating consistent digest of a json data string',
     long_description=readme,
     long_description_content_type='text/markdown',
     url='',
