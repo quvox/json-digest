@@ -1,0 +1,12 @@
+include INSTALL
+include LICENSE.txt
+include MANIFEST.in
+include *.rst
+include prepare.py
+graft extras
+graft js_tests
+graft scripts
+prune tests
+prune __pycache__
+prune .pytest_cache
+prune *.py[co]

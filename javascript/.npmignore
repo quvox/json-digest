@@ -1,0 +1,7 @@
+tests/
+.eslintrc
+.gitignore
+.git/
+.nyc_output/
+coverage/
+.idea/
