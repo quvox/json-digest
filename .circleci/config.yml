@@ -5,7 +5,7 @@ workflows:
       - build-python:
           filters:
             tags:
-              only: /^py-.*/
+              only: /^py-v.*/
             branches:
               ignore: /.*/
       - test-python:
@@ -13,7 +13,7 @@ workflows:
             - build-python
           filters:
             tags:
-              only: /^py-.*/
+              only: /^py-v.*/
             branches:
               ignore: /.*/
       - deploy-python:
@@ -21,31 +21,31 @@ workflows:
             - test-python
           filters:
             tags:
-              only: /^js-.*/
+              only: /^py-v.*/
             branches:
-              only: /.*/
+              ignore: /.*/
       - build-js:
           filters:
             tags:
-              only: /^js-.*/
+              only: /^js-v.*/
             branches:
-              only: /.*/
+              ignore: /.*/
       - test-js:
           requires:
             - build-js
           filters:
             tags:
-              only: /^js-.*/
+              only: /^js-v.*/
             branches:
-              only: /.*/
+              ignore: /.*/
       - deploy-js:
           requires:
             - test-js
           filters:
             tags:
-              only: /^js-.*/
+              only: /^js-v.*/
             branches:
-              only: /.*/
+              ignore: /.*/
 jobs:
   build-python:
     docker:
@@ -119,7 +119,7 @@ jobs:
             - "venv"
   build-js:
     docker:
-      - image: circleci/node:chakracore-10.13.0
+      - image: circleci/node:10.15.3-browsers
     steps:
       - checkout
       - restore_cache:
@@ -138,7 +138,7 @@ jobs:
             - "~/.config"
   test-js:
     docker:
-      - image: circleci/node:chakracore-10.13.0
+      - image: circleci/node:10.15.3-browsers
     steps:
       - checkout
       - restore_cache:
@@ -148,7 +148,9 @@ jobs:
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             cd javascript
+            yarn build
             yarn test
+            yarn test:bundle
             yarn karma
             yarn karma:window
             yarn karma:bundle
@@ -160,17 +162,24 @@ jobs:
             - "~/.config"
   deploy-js:
     docker:
-      - image: circleci/node:chakracore-10.13.0
+      - image: circleci/node:10.15.3-browsers
     steps:
       - checkout
       - restore_cache:
           key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
       - run:
-          name: build package
+          name: deploy package
           command: |
+            sudo apt -y install jq
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             cd javascript
-            python setup.py verify
+            export NPMVER=`cat package.json | jq ."version"`
+            if [[ "js-v${NPMVER}" != ${CIRCLE_TAG} ]]; then
+              exit 1
+            fi
+            yarn build
+            echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc
+            npm publish
       - save_cache:
           key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
           paths:

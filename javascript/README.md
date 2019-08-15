@@ -1,6 +1,8 @@
 Consistent message digest for JSON object
 =====
 
+[![npm version](https://badge.fury.io/js/json-structure-digest.svg)](https://badge.fury.io/js/json-structure-digest)
+[![Dependency Status](https://david-dm.org/quvox/json-digest.svg)](https://david-dm.org/quvox/json-digest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This module creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
@@ -27,43 +29,54 @@ npm install json-structure-digest
 
 A basic usage is like as follows:
 ```javascript
-import { digest } from json-structure-digest;
+const jsd = require('json-structure-digest');
 
-const obj = {
-    "digest_version": 1,
-    "key1": 1,
-    "key2": 2.34,
-    "key3": "VALUE3",
-    "key4": {
-        "key4-1": 2,
-        "key4-2": [1, 2, 3, False, "xyz"]
-    },
-    "key5": ["VALUE5", 5.55, True, ["VALUE5-2", None], {"key5-2": 123}]
+const testFunc = async () => {
+    const obj = {
+        "digest_version": 1,
+        "key1": 1,
+        "key2": 2.34,
+        "key3": "VALUE3",
+        "key4": {
+            "key4-1": 2,
+            "key4-2": [1, 2, 3, false, "xyz"]
+        },
+        "key5": ["VALUE5", 5.55, true, ["VALUE5-2", null], {"key5-2": 123}]
+    };
+    const jsonString = JSON.stringify(obj);
+    
+    const result = await jsd.digest(jsonString);
+    const sha256Hex = result.digest;
+    const digestStructure = result.digestStructure;
 };
-const jsonString = JSON.stringify(obj);
 
-const result = digest(jsonString);
-const sha256Hex = result.digest;
-const digestStructure = result.digestStructure;
+testFunc();
 ```
 
+Only "digest()" is exposed in this module. Note that digest() accepts string params only.
+  
 In the case that you have the above *digestStructure* and partial object, you can also calculate the digest using these two information and will obtain the same result as above.
 
 ```javascript
-const objPartial = {
-    "digest_version": 1,
-    "key1": 1,
-    "key2": 2.34,
-    "key3": "VALUE3",
-};
-const jsonStringPartial = JSON.stringify(objPartial)
+const jsd = require('json-structure-digest');
 
-const result2 = digest(jsonStringPartial, JSON.stringify(digestStructure))
-const sha256Hex2 = result2.digest;
-const digestStructure2 = result2.digestStructure;
+const testFunc2 = async () => {
+    const objPartial = {
+        "digest_version": 1,
+        "key1": 1,
+        "key2": 2.34,
+        "key3": "VALUE3",
+    };
+    const jsonStringPartial = JSON.stringify(objPartial)
+    
+    const result2 = await jsd.digest(jsonStringPartial, JSON.stringify(digestStructure))
+    const sha256Hex2 = result2.digest;
+    const digestStructure2 = result2.digestStructure;
+};
+testFunc2();
 ```
 
-sha256Hex and sha256Hex2, digestStructure and digestStructure2  are identical, respectively. Note that the digest method accepts string params only.
+sha256Hex and sha256Hex2, digestStructure and digestStructure2 are identical, respectively.
 
 
 
