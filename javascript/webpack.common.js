@@ -65,7 +65,7 @@ module.exports = {
   libName: libName,
   entryName: getEntryName(),
   bundleName: getBundleName(),
-  applicationEnv: applicationEnv,
+  applicationEnv: applicationEnv
 };
 
 // // port babelrc from .babelrc

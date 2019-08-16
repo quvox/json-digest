@@ -74,7 +74,7 @@ module.exports = (env, argv) => {
 const typeList = {
   source: {filePrefix: ''},
   bundle: {filePrefix: 'fromBundled'},
-  window: {filePrefix: 'fromWindow'},
+  window: {filePrefix: 'fromWindow'}
 };
 const testHtmlName = './tests/html/test.html';
 

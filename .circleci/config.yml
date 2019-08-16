@@ -5,7 +5,7 @@ workflows:
       - build-python:
           filters:
             tags:
-              only: /^py-.*/
+              only: /^py-v.*/
             branches:
               ignore: /.*/
       - test-python:
@@ -13,7 +13,7 @@ workflows:
             - build-python
           filters:
             tags:
-              only: /^py-.*/
+              only: /^py-v.*/
             branches:
               ignore: /.*/
       - deploy-python:
@@ -21,7 +21,29 @@ workflows:
             - test-python
           filters:
             tags:
-              only: /^py-.*/
+              only: /^py-v.*/
+            branches:
+              ignore: /.*/
+      - build-js:
+          filters:
+            tags:
+              only: /^js-v.*/
+            branches:
+              ignore: /.*/
+      - test-js:
+          requires:
+            - build-js
+          filters:
+            tags:
+              only: /^js-v.*/
+            branches:
+              ignore: /.*/
+      - deploy-js:
+          requires:
+            - test-js
+          filters:
+            tags:
+              only: /^js-v.*/
             branches:
               ignore: /.*/
 jobs:
@@ -95,3 +117,72 @@ jobs:
           key: v1-dependency-cache-{{ checksum "python/setup.py" }}
           paths:
             - "venv"
+  build-js:
+    docker:
+      - image: circleci/node:10.16.2-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+      - run:
+          name: install node_modules
+          command: |
+            curl -o- -L https://yarnpkg.com/install.sh | bash
+            cd javascript
+            yarn install
+      - save_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          paths:
+            - "javascript/node_modules"
+            - "~/.yarn"
+            - "~/.config"
+  test-js:
+    docker:
+      - image: circleci/node:10.16.2-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+      - run:
+          name: Perform test
+          command: |
+            export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+            cd javascript
+            yarn build
+            yarn test
+            yarn test:bundle
+            yarn karma
+            yarn karma:window
+            yarn karma:bundle
+      - save_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          paths:
+            - "javascript/node_modules"
+            - "~/.yarn"
+            - "~/.config"
+  deploy-js:
+    docker:
+      - image: circleci/node:10.16.2-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+      - run:
+          name: deploy package
+          command: |
+            sudo apt -y install jq
+            export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+            cd javascript
+            export NPMVER=`cat package.json | jq ."version"`
+            if [[ "js-v${NPMVER}" != ${CIRCLE_TAG} ]]; then
+              exit 1
+            fi
+            yarn build
+            echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc
+            npm publish
+      - save_cache:
+          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          paths:
+            - "javascript/node_modules"
+            - "~/.yarn"
+            - "~/.config"

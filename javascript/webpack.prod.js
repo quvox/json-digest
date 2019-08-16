@@ -19,7 +19,7 @@ const webpackConfig = {
         STAGING_PARAMS: JSON.stringify(common.applicationEnv),
       }
     })
-  ],
+  ]
 };
 
 module.exports = (env, argv) => {
