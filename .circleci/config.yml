@@ -173,7 +173,7 @@ jobs:
             sudo apt -y install jq
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             cd javascript
-            export NPMVER=`cat package.json | jq ."version"`
+            export NPMVER=`cat package.json | jq -r ."version"`
             if [[ "js-v${NPMVER}" != ${CIRCLE_TAG} ]]; then
               exit 1
             fi
