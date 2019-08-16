@@ -13,7 +13,7 @@ This repository also includes [Python version](../python/README.md).
 
 ## Environment and install
 * Support
-  - Nodejs 0.10 or later
+  - Nodejs 10.0 or later
   - Browsers (chrome, firefox, safari, edge)
 * install the module
 ```bash
