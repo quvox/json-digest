@@ -91,7 +91,7 @@
     "typescript": "3.5.3",
     "webpack": "4.39.2",
     "webpack-bundle-size-analyzer": "3.0.0",
-    "webpack-cli": "3.3.6",
+    "webpack-cli": "3.3.7",
     "webpack-common-shake": "2.1.0",
     "webpack-merge": "4.2.1"
   }
