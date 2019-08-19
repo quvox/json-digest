@@ -5,6 +5,10 @@
   "author": "Takeshi Kubo",
   "license": "MIT",
   "private": false,
+  "homepage": "https://github.com/quvox/json-digest/",
+  "bugs": {
+    "url": "https://github.com/quvox/json-digest/issues"
+  },
   "keywords": [
     "json",
     "digest",
