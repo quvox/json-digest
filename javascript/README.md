@@ -7,7 +7,7 @@ Consistent message digest for JSON object
 
 This module creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
-This repository also includes [Python version](../python/README.md).
+This repository also includes [Python version](https://github.com/quvox/json-digest/tree/develop/python/README.md).
 
 
 
@@ -102,7 +102,7 @@ sha256Hex and sha256Hex2, digestStructure and digestStructure2 are identical, re
 * All digests are expressed in HEX string in little endian.
 
 
-See [here](../README.md) in detail.
+See [here](https://github.com/quvox/json-digest/blob/develop/README.md) in detail.
 
 
 ## License
