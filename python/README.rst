@@ -7,7 +7,7 @@ Consistent message digest for JSON object
 
 This module is a python module that creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
-This repository also includes [Javascript version](../javascript/README.md).
+This repository also includes [Javascript version](https://github.com/quvox/json-digest/blob/develop/javascript/README.md).
 
 
 ## Environment and install
@@ -61,7 +61,7 @@ sha256_hex2 = result2["digest"]
 digest_structure2 = result2["digest_structure"]
 ```
 
-sha256_hex and sha256_hex2, digest_structure and digest_structure2  are identical, respectively. Note that the digest method accepts string params only.
+sha256_hex and sha256_hex2, digest_structure and digest_structure2  are identical, respectively. Note that the digest method accepts string params only. 
 
 
 ## Command line tool
@@ -74,14 +74,14 @@ or
 ```bash
 $ cat path_to_jsonfile | json_digest.py
 ```
-You will get a json string of the digest and the digest structure of the given json file.
+You will get a json string of the digest and the digest structure of the given json file. 
 
 
 
 ## Requirements
 * JSON string must comply with [RFC8259](https://tools.ietf.org/html/rfc8259).
   - The JSON string must be encoded with UTF-8 and no BOM.
-  - Supported types of value are string, number (integer, float), object, array, boolean and null.
+  - Supported types of value are string, number (integer, float), object, array, boolean and null. 
 * "digest_version" must be included in the JSON.
 
 
@@ -93,7 +93,7 @@ You will get a json string of the digest and the digest structure of the given j
 * The digest function in this version is SHA256.
 * To achieve consistency, the keys at each level in the JSON object are sorted in increasing order of the ASCII value in the digest calculation procedure.
 * The following conversions before digest calculation are performed:
-  - An integer value is converted in 8-byte array in little-endian.
+  - An integer value is converted in 8-byte array in little-endian. 
   - A float value is converted in 8-byte array in little-endian.
   - A boolean value is converted to either "true" or "false".
   - A null value is converted to "null".
@@ -101,7 +101,7 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 
-See [here](../README.md) in detail.
+See [here](https://github.com/quvox/json-digest/blob/develop/README.md) in detail.
 
 
 ## License
