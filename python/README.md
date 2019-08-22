@@ -7,7 +7,7 @@ Consistent message digest for JSON object
 
 This module is a python module that creates structured digests based on a given JSON data for consistent message digest calculation. The procedure of digest calculation is described below.
 
-This repository also includes [Javascript version](../javascript/README.md).
+This repository also includes [Javascript version](https://github.com/quvox/json-digest/blob/develop/javascript/README.md).
 
 
 ## Environment and install
@@ -101,7 +101,7 @@ You will get a json string of the digest and the digest structure of the given j
 
 
 
-See [here](../README.md) in detail.
+See [here](https://github.com/quvox/json-digest/blob/develop/README.md) in detail.
 
 
 ## License

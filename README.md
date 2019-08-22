@@ -214,9 +214,9 @@ You will get the same result by ```digest(json.dumps(partial_jsonobj), json.dump
 
 ## Usage
 
-For Python module, see [here](./python/README.md).
+For Python module, see [here](https://github.com/quvox/json-digest/blob/develop/python/README.md).
 
-For Javascript, see [here](./javascript/README.md).
+For Javascript, see [here](https://github.com/quvox/json-digest/blob/develop/javascript/README.md).
 
 ## License
 MIT
