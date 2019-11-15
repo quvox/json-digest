@@ -27,17 +27,13 @@ workflows:
       - build-js:
           filters:
             tags:
-              only: /^js-v.*/
-            branches:
-              ignore: /.*/
+              only: /.*/
       - test-js:
           requires:
             - build-js
           filters:
             tags:
-              only: /^js-v.*/
-            branches:
-              ignore: /.*/
+              only: /.*/
       - deploy-js:
           requires:
             - test-js
