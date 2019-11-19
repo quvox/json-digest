@@ -62,7 +62,7 @@
   ],
   "dependencies": {
     "int64-buffer": "^0.99.1007",
-    "js-crypto-hash": "^0.5.1"
+    "js-crypto-hash": "^0.6.0"
   },
   "devDependencies": {
     "@types/chai": "4.2.5",
