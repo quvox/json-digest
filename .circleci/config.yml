@@ -27,17 +27,13 @@ workflows:
       - build-js:
           filters:
             tags:
-              only: /^js-v.*/
-            branches:
-              ignore: /.*/
+              only: /.*/
       - test-js:
           requires:
             - build-js
           filters:
             tags:
-              only: /^js-v.*/
-            branches:
-              ignore: /.*/
+              only: /.*/
       - deploy-js:
           requires:
             - test-js
@@ -49,7 +45,7 @@ workflows:
 jobs:
   build-python:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.8
     steps:
       - checkout
       - restore_cache:
@@ -67,7 +63,7 @@ jobs:
             - "venv"
   test-python:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.8
     steps:
       - checkout
       - restore_cache:
@@ -90,7 +86,7 @@ jobs:
             - "venv"
   deploy-python:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.8
     steps:
       - checkout
       - restore_cache:
@@ -119,7 +115,7 @@ jobs:
             - "venv"
   build-js:
     docker:
-      - image: circleci/node:10.16.3-browsers
+      - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
@@ -130,6 +126,7 @@ jobs:
             curl -o- -L https://yarnpkg.com/install.sh | bash
             cd javascript
             yarn install
+            echo "CACHE=$CACHE_NAME"
       - save_cache:
           key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
           paths:
@@ -138,7 +135,7 @@ jobs:
             - "~/.config"
   test-js:
     docker:
-      - image: circleci/node:10.16.3-browsers
+      - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
@@ -147,6 +144,7 @@ jobs:
           name: Perform test
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+            echo "CACHE=$CACHE_NAME"
             cd javascript
             yarn build
             yarn test
@@ -162,7 +160,7 @@ jobs:
             - "~/.config"
   deploy-js:
     docker:
-      - image: circleci/node:10.16.3-browsers
+      - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
