@@ -144,6 +144,7 @@ jobs:
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             cd javascript
+            yarn install
             yarn build
             yarn test
             yarn test:bundle
