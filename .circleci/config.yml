@@ -126,6 +126,7 @@ jobs:
             curl -o- -L https://yarnpkg.com/install.sh | bash
             cd javascript
             yarn install
+            echo "CACHE=$CACHE_NAME"
       - save_cache:
           key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
           paths:
@@ -143,6 +144,7 @@ jobs:
           name: Perform test
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+            echo "CACHE=$CACHE_NAME"
             cd javascript
             yarn build
             yarn test
