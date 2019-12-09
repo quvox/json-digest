@@ -115,36 +115,40 @@ jobs:
             - "venv"
   build-js:
     environment:
-      - cachename: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+      - CACHE_NAME: yarn-packages-{{ checksum "javascript/yarn.lock" }}
     docker:
       - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
-          key: ${cachename}
+          key: $CACHE_NAME
       - run:
           name: install node_modules
           command: |
             curl -o- -L https://yarnpkg.com/install.sh | bash
             cd javascript
             yarn install
+            echo "CACHE=$CACHE_NAME"
       - save_cache:
-          key: ${cachename}
+          key: $CACHE_NAME
           paths:
             - "javascript/node_modules"
             - "~/.yarn"
             - "~/.config"
   test-js:
+    environment:
+      - CACHE_NAME: yarn-packages-{{ checksum "javascript/yarn.lock" }}
     docker:
       - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
-          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          key: $CACHE_NAME
       - run:
           name: Perform test
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+            echo "CACHE=$CACHE_NAME"
             cd javascript
             yarn build
             yarn test
