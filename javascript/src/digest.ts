@@ -230,7 +230,7 @@ const _toUTF8Array = (str): Uint8Array => {
   return new Uint8Array(utf8);
 };
 
-const _toHex = (buf: Uint8Array[]): string => {
+const _toHex = (buf: Uint8Array): string => {
   const result = [];
   for (const i in buf) {
     const val = "00" + Number(buf[i]).toString(16);
