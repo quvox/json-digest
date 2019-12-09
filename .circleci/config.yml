@@ -114,12 +114,14 @@ jobs:
           paths:
             - "venv"
   build-js:
+    environment:
+      - cachename: yarn-packages-{{ checksum "javascript/yarn.lock" }}
     docker:
       - image: circleci/node:10.17.0-browsers
     steps:
       - checkout
       - restore_cache:
-          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          key: ${cachename}
       - run:
           name: install node_modules
           command: |
@@ -127,7 +129,7 @@ jobs:
             cd javascript
             yarn install
       - save_cache:
-          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
+          key: ${cachename}
           paths:
             - "javascript/node_modules"
             - "~/.yarn"
