@@ -2,5 +2,8 @@
   "extends": [
     "config:base"
   ],
+  "assignees": ["quvox"],
+  "major": { "automerge": false },
+  "minor": { "automerge": true },
   "patch": { "automerge": true }
 }
