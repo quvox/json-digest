@@ -38,8 +38,6 @@ jobs:
       - image: circleci/python:3.8
     steps:
       - checkout
-      - restore_cache:
-          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
       - run:
           name: install python dependencies
           command: |
