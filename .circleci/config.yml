@@ -2,12 +2,6 @@ version: 2.1
 workflows:
   build_and_deploy:
     jobs:
-      - build-python:
-          filters:
-            tags:
-              only: /^py-v.*/
-            branches:
-              ignore: /.*/
       - test-python:
           requires:
             - build-python
@@ -24,10 +18,6 @@ workflows:
               only: /^py-v.*/
             branches:
               ignore: /.*/
-      - build-js:
-          filters:
-            tags:
-              only: /.*/
       - test-js:
           requires:
             - build-js
@@ -43,7 +33,7 @@ workflows:
             branches:
               ignore: /.*/
 jobs:
-  build-python:
+  test-python:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -57,17 +47,6 @@ jobs:
             . venv/bin/activate
             pip install pytest
             pip install -r python/scripts/requirements-pypi.txt
-      - save_cache:
-          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
-          paths:
-            - "venv"
-  test-python:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-dependency-cache-{{ checksum "python/setup.py" }}
       - run:
           name: Perform test
           command: |
@@ -113,7 +92,7 @@ jobs:
           key: v1-dependency-cache-{{ checksum "python/setup.py" }}
           paths:
             - "venv"
-  build-js:
+  test-js:
     docker:
       - image: circleci/node:10.17.0-browsers
     steps:
@@ -126,25 +105,10 @@ jobs:
             curl -o- -L https://yarnpkg.com/install.sh | bash
             cd javascript
             yarn install
-            echo "CACHE=$CACHE_NAME"
-      - save_cache:
-          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
-          paths:
-            - "javascript/node_modules"
-            - "~/.yarn"
-            - "~/.config"
-  test-js:
-    docker:
-      - image: circleci/node:10.17.0-browsers
-    steps:
-      - checkout
-      - restore_cache:
-          key: yarn-packages-{{ checksum "javascript/yarn.lock" }}
       - run:
           name: Perform test
           command: |
             export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-            echo "CACHE=$CACHE_NAME"
             cd javascript
             yarn build
             yarn test
