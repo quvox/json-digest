@@ -86,7 +86,7 @@
     "karma-mocha-reporter": "2.2.5",
     "karma-typescript": "5.0.3",
     "karma-webpack": "4.0.2",
-    "lodash": "4.17.17",
+    "lodash": "4.17.19",
     "mocha": "7.2.0",
     "mocha-sinon": "2.1.2",
     "nyc": "15.1.0",
