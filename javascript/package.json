@@ -67,7 +67,7 @@
   "devDependencies": {
     "@types/chai": "4.2.12",
     "@types/lodash": "4.14.159",
-    "@types/mocha": "7.0.2",
+    "@types/mocha": "8.0.2",
     "@types/node": "12.12.54",
     "@typescript-eslint/eslint-plugin": "3.9.0",
     "chai": "4.2.0",
@@ -87,7 +87,7 @@
     "karma-typescript": "5.0.3",
     "karma-webpack": "4.0.2",
     "lodash": "4.17.19",
-    "mocha": "7.2.0",
+    "mocha": "8.1.1",
     "mocha-sinon": "2.1.2",
     "nyc": "15.1.0",
     "ts-loader": "6.2.2",
