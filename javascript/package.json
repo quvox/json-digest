@@ -84,7 +84,7 @@
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-mocha": "2.0.1",
     "karma-mocha-reporter": "2.2.5",
-    "karma-typescript": "5.0.3",
+    "karma-typescript": "5.1.0",
     "karma-webpack": "4.0.2",
     "lodash": "4.17.19",
     "mocha": "8.1.1",
