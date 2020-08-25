@@ -87,7 +87,7 @@
     "karma-typescript": "5.1.0",
     "karma-webpack": "4.0.2",
     "lodash": "4.17.20",
-    "mocha": "8.1.1",
+    "mocha": "8.1.2",
     "mocha-sinon": "2.1.2",
     "nyc": "15.1.0",
     "ts-loader": "8.0.3",
