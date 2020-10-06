@@ -68,7 +68,7 @@
     "@types/chai": "4.2.13",
     "@types/lodash": "4.14.161",
     "@types/mocha": "8.0.3",
-    "@types/node": "12.12.62",
+    "@types/node": "12.12.63",
     "@typescript-eslint/eslint-plugin": "3.10.1",
     "chai": "4.2.0",
     "cross-env": "7.0.2",
