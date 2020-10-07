@@ -31,7 +31,7 @@ workflows:
 jobs:
   test-python:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
@@ -59,7 +59,7 @@ jobs:
             - "venv"
   deploy-python:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
     steps:
       - checkout
       - restore_cache:
