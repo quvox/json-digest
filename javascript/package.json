@@ -65,7 +65,7 @@
     "js-crypto-hash": "^0.6.0"
   },
   "devDependencies": {
-    "@types/chai": "4.2.13",
+    "@types/chai": "4.2.14",
     "@types/lodash": "4.14.162",
     "@types/mocha": "8.0.3",
     "@types/node": "12.12.67",
