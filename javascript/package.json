@@ -72,7 +72,7 @@
     "@typescript-eslint/eslint-plugin": "3.10.1",
     "chai": "4.3.4",
     "cross-env": "7.0.3",
-    "eslint": "7.27.0",
+    "eslint": "7.28.0",
     "eslint-plugin-chai-expect": "2.2.0",
     "espower-typescript": "9.0.2",
     "istanbul-instrumenter-loader": "3.0.1",
