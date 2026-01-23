@@ -73,7 +73,7 @@
     "chai": "4.3.4",
     "cross-env": "7.0.3",
     "eslint": "7.32.0",
-    "eslint-plugin-chai-expect": "2.2.0",
+    "eslint-plugin-chai-expect": "3.1.0",
     "espower-typescript": "9.0.2",
     "istanbul-instrumenter-loader": "3.0.1",
     "jsdom": "16.7.0",
