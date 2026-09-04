@@ -65,12 +65,12 @@
     "js-crypto-hash": "^0.6.0"
   },
   "devDependencies": {
-    "@types/chai": "4.2.22",
+    "@types/chai": "4.3.20",
     "@types/lodash": "4.17.25",
     "@types/mocha": "8.2.3",
     "@types/node": "12.20.55",
     "@typescript-eslint/eslint-plugin": "3.10.1",
-    "chai": "4.3.4",
+    "chai": "4.5.0",
     "cross-env": "7.0.3",
     "eslint": "7.32.0",
     "eslint-plugin-chai-expect": "2.2.0",
